@@ -5,12 +5,12 @@ library(tidyverse)
 library(Metrics)
 
 #all data
-data <- read.csv("model_transformed_chlasqrt_2013_2016.csv")
+data <- read.csv("./Data/ARIMA_data/model_transformed_chlasqrt_2013_2016.csv")
 
 ##################################################################################################################################################3
 ####################################2016 dataset, selected variables #################################
 # read in correlation matrix for selected predictable variable names
-varall <- read.csv("./correlation matrices/chlasqrt_1.0m/correlation_matrix_chlasqrt_2013_2016_selected_predictable.csv")
+varall <- read.csv("./Data/ARIMA_data/correlation matrices/chlasqrt_1.0m/correlation_matrix_chlasqrt_2013_2016_selected_predictable.csv")
 # insert an empty date column so that it can be matched with the dataset
 varall$Date <- NA
 varall <- varall%>%select(Date, everything())
@@ -39,7 +39,7 @@ sd(mod1_1316$residuals)
 summary(mod1_1316)
 
 data_arima <- dataall %>% select(Date, Chla_sqrt, Chla_ARlag1_sqrt, mean_flow, ShortWave_mean)
-write.csv(data_arima, "data_arima_WW.csv", row.names = FALSE)
+#write.csv(data_arima, "data_arima_WW.csv", row.names = FALSE)
 
 
 
@@ -84,3 +84,4 @@ par(mfrow = c(2,2))
 plot((dataall$Chla_ARlag1_sqrt)^2, (dataall$Chla_sqrt)^2, xlab = "Chla t-1 (ug/L)", ylab ="Chla (ug/L)" )
 plot(dataall$mean_flow, dataall$Chla_ugL, xlab = "Mean flow (m3/s)", ylab = "Chla (ug/L)")
 plot(dataall$ShortWave_mean, dataall$Chla_ugL, xlab = "Mean Shortwave (W/m2)", ylab = "Chla (ug/L)")
+
