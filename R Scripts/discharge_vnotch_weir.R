@@ -18,9 +18,13 @@ dianadata <- dianadata %>% select("TIMESTAMP", "diana_psi_corr")
 # where H = head in meters above the notch
 # the head was 14.8 cm on June 24 at ~13:30
 #14.8 cm is 0.148 m 
+#14.9cm on Jun 27 at 3:49PM
 dianadata <- dianadata %>% 
   mutate(head = (0.148*diana_psi_corr)/0.295) %>% 
   mutate(flow_cms = 2.391* (head^2.5))
 
 plot(dianadata$TIMESTAMP, dianadata$flow_cms, type = 'l')
 plot(dianadata$TIMESTAMP, dianadata$head, type = 'l')
+
+
+# do the same with WVWA pressure transducer
