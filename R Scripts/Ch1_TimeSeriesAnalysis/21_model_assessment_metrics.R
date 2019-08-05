@@ -6,12 +6,12 @@ library(MuMIn)
 
 # first bring in the observed data fit to the right size
 # now bring in arima output to calculate rmse and r2 in the same way
-data <- read.csv("model_transformed_chlasqrt_2013_2016.csv")
+data <- read.csv("./Data/ARIMA_data/model_transformed_chlasqrt_2013_2016.csv")
 data$Date <- as.Date(data$Date)
 
 
 # read in correlation matrix for selected predictable variable names
-varall <- read.csv("./correlation matrices/chlasqrt_1.0m/correlation_matrix_chlasqrt_2013_2016_selected_predictable.csv")
+varall <- read.csv("./Data/ARIMA_data/correlation matrices/chlasqrt_1.0m/correlation_matrix_chlasqrt_2013_2016_selected_predictable.csv")
 # insert an empty date column so that it can be matched with the dataset
 varall$Date <- NA
 varall <- varall%>%select(Date, everything())
@@ -35,9 +35,8 @@ pred1_1316 <- predict(mod1_1316, newdata = dataall)
 #############################################################################################################
 # now bring in the glm model output
 
-glm <- read.csv("./GLM/CHLA_GLMoutput_from30Jan19nml_27Feb19.csv")
-srf_glm <- glm[glm$Depth==1.0,]
-srf_glm$Date <- as.Date(srf_glm$DateTime)
+glm <- read.csv("./Data/ARIMA_data/GLM_output/Chla1mForWhitney_28June2019.csv")
+glm$Date <- as.Date(glm$DateTime)
 plot(srf_glm$DateTime, srf_glm$Observed_PHY_TCHLA, type = 'l', lwd = 2)
 points(srf_glm$DateTime, srf_glm$Modeled_PHY_TCHLA, lwd = 2, col = 'darkcyan', type = 'l')
 legend('topleft', c('Observed', 'GLM Modeled'), lty = c(1,1), col = c('black', 'darkcyan'), bty = 'n')
