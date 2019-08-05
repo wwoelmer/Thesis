@@ -5,12 +5,12 @@ library(tidyverse)
 library(Metrics)
 
 
-data <- read.csv("model_transformed_chlasqrt_2013_2016.csv")
+data <- read.csv("./Data/ARIMA_data/data_arima_WW.csv")
 data$Date <- as.Date(data$Date)
 
 
 # read in correlation matrix for selected predictable variable names
-varall <- read.csv("./correlation matrices/chlasqrt_1.0m/correlation_matrix_chlasqrt_2013_2016_selected_predictable.csv")
+varall <- read.csv("./Data/ARIMA_data/correlation matrices/chlasqrt_1.0m/correlation_matrix_chlasqrt_2013_selected_predictabledrivers.csv")
 # insert an empty date column so that it can be matched with the dataset
 varall$Date <- NA
 varall <- varall%>%select(Date, everything())

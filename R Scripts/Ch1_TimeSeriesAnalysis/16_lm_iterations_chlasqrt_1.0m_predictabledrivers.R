@@ -9,18 +9,18 @@ library(rsq)
 library(tidyverse)
 
 #all data
-data <- read.csv("model_transformed_chlasqrt_2013_2016.csv")
+data <- read.csv("./Data/ARIMA_data/data_arima_WW.csv")
 
 ##################################################################################################################################################3
 ####################################2013 dataset, predictable variables only #################################
 # read in correlation matrix for selected predictable variable names
-varall <- read.csv("./correlation matrices/chlasqrt_1.0m/correlation_matrix_chlasqrt_2013_selected_predictabledrivers.csv")
+varall <- read.csv("./Data/ARIMA_data/correlation matrices/chlasqrt_1.0m/correlation_matrix_chlasqrt_2013_selected_predictabledrivers.csv")
 varall <- varall %>% select(-X)
 # insert an empty date column so that it can be matched with the dataset
 varall$Date <- NA
 varall <- varall%>%select(Date, everything())
 # subset dataset by the column names in the correlation matrix
-dataall <- data[,colnames(varall)]
+dataall <- data %>% select(colnames(varall))
 # subset to get rid of NA's at beginning so that the model will run. this truncates dataset to May 15 2013
 dataall$Date <- as.Date(dataall$Date)
 dataall <- dataall[dataall$Date>"2013-05-09" & dataall$Date<"2014-01-01",]
