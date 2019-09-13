@@ -48,6 +48,8 @@ glm_chl <- na.omit(glm_chl)
 rmse(dataall$Chla_ugL, (pred1_1316)^2)
 r2 <- function (x, y) cor(x, y) ^ 2
 r2(dataall$Chla_ugL, (pred1_1316)^2)
+plot(dataall$Chla_ugL, (pred1_1316)^2)
+plot(dataall$Date, dataall$Chla_ugL)
 
 rmse(glm_chl$Chla_ugL, glm_chl$Modeled_PHY_TCHLA)
 r2(glm_chl$Chla_ugL, glm_chl$Modeled_PHY_TCHLA)
