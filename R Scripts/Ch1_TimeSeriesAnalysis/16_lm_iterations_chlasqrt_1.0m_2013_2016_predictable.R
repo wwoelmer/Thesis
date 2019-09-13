@@ -58,18 +58,25 @@ pred3_1316 <- predict(mod3_1316, newdata = dataall)
 # plot the predictions for the entire dataset
 plot(dataall$Date, dataall$Chla_ugL, type = 'l')
 points(dataall$Date, (pred1_1316)^2, col = 'red', type = 'l')
-points(dataall$Date, pred2_1316, col = 'orange', type = 'l')
-points(dataall$Date, pred3_1316, col = 'gold', type = 'l')
+points(dataall$Date, (pred2_1316)^2, col = 'orange', type = 'l')
+points(dataall$Date, (pred3_1316)^2, col = 'gold', type = 'l')
 
 # calculate R2 and RMSE
 round((rsq(mod1_1316, type = 'sse')), digits = 3)
 round((rsq(mod2_1316, type = 'sse')), digits = 3)
 round((rsq(mod3_1316, type = 'sse')), digits = 3)
 
+
+r2 <- function (x, y) cor(x, y) ^ 2
+r2(dataall$Chla_ugL, (pred1_1316)^2)
+r2(dataall$Chla_ugL, (pred2_1316)^2)
+r2(dataall$Chla_ugL, (pred3_1316)^2)
+
+
 rmse((pred1_1316)^2, dataall$Chla_ugL)
 rmse((pred1_1316)^2, (dataall$Chla_sqrt)^2)
-rmse(pred2_1316, dataall$Chla_sqrt)
-rmse(pred3_1316, dataall$Chla_sqrt)
+rmse((pred2_1316)^2, dataall$Chla_ugL)
+rmse((pred3_1316)^2, dataall$Chla_ugL)
 
 
 # work with the bias calculations
