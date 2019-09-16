@@ -2,7 +2,7 @@
 #install.packages('tidyverse')
 library(tidyverse)
 
-raw <- read_csv('C:/Users/wwoel/Dropbox/FCR_TimeSeries/FCR/MET/FCR_GLM_met_NLDAS2_010113_010118_GMTadjusted.csv')
+raw <- read_csv('C:/Users/wwoel/Dropbox/Thesis/Data/MET/FCR_GLM_met_NLDAS2_010113_010118_GMTadjusted.csv')
 head(raw) # View data preview with auto-parsed structures 
 
 # Calculate all statistics for all varaibles, then drop the ones you don't need
@@ -29,4 +29,4 @@ ggplot(met_long, aes(x = Date, y = Value, group = Variable, col = Statistic)) +
   geom_line() +
   facet_grid(Variable ~ ., scales = "free_y")
 
-write.csv(met, "Met_FCR_daily.csv")
+#write.csv(met, "Met_FCR_daily.csv")
