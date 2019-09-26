@@ -4,10 +4,10 @@ library(tidyverse)
 library(lubridate)
 
 # download the latest diana weir file
-download.file('https://github.com/CareyLabVT/SCCData/raw/diana-data/FCRweir.csv','./DataAnalysis/Data/Inflow/FCRweir.csv')
+download.file('https://github.com/CareyLabVT/SCCData/raw/diana-data/FCRweir.csv','./Data/Inflow/FCRweir.csv')
 
-dianaheader<-read.csv("./DataAnalysis/Data/Inflow/FCRweir.csv", skip=1, as.is=T) #get header minus wonky Campbell rows
-dianadata<-read.csv("./DataAnalysis/Data/Inflow/FCRweir.csv", skip=4, header=F) #get data minus wonky Campbell rows
+dianaheader<-read.csv("./Data/Inflow/FCRweir.csv", skip=1, as.is=T) #get header minus wonky Campbell rows
+dianadata<-read.csv("./Data/Inflow/FCRweir.csv", skip=4, header=F) #get data minus wonky Campbell rows
 names(dianadata)<-names(dianaheader) #combine the names to deal with Campbell logger formatting
 dianadata$TIMESTAMP <- as.POSIXct(dianadata$TIMESTAMP, format = "%Y-%m-%d %H:%M:%S")
 colnames(dianadata)[colnames(dianadata)=="Lvl_psi"] <- "diana_psi_corr"
@@ -15,28 +15,28 @@ dianadata <- dianadata %>% select("TIMESTAMP", "diana_psi_corr")
 
 # download the latest wvwa weir file
 #check Reservoirs to see the latest weir data upload
-wvwadata1 <- read.csv("./DataAnalysis/Data/Inflow/FCR_15min_Inf_20190527.csv", skip = 28, header = T)
+wvwadata1 <- read.csv("./Data/Inflow/FCR_15min_Inf_20190527.csv", skip = 28, header = T)
 colnames(wvwadata1)[colnames(wvwadata1)=="Date.Time"] <- "TIMESTAMP"
 wvwadata1 <- wvwadata1 %>% mutate(TIMESTAMP = parse_date_time(TIMESTAMP, 'dmy HMS',tz = "EST"))
 wvwadata1$TIMESTAMP <- floor_date(wvwadata1$TIMESTAMP, "15 minutes")
 colnames(wvwadata1)[colnames(wvwadata1)=="Pressure.psi."] <- "wvwa_psi_uncorr"
 wvwadata1 <- wvwadata1 %>% select("TIMESTAMP", "wvwa_psi_uncorr")
 # also load in older wvwa pressure data
-wvwadata2 <- read.csv("./DataAnalysis/Data/Inflow/FCR_15min_Inf_20190506.csv", skip = 28, header = T)
+wvwadata2 <- read.csv("./Data/Inflow/FCR_15min_Inf_20190506.csv", skip = 28, header = T)
 colnames(wvwadata2)[colnames(wvwadata2)=="Date.Time"] <- "TIMESTAMP"
 wvwadata2 <- wvwadata2 %>% mutate(TIMESTAMP = parse_date_time(TIMESTAMP, 'dmy HMS',tz = "EST"))
 wvwadata2$TIMESTAMP <- floor_date(wvwadata2$TIMESTAMP, "15 minutes")
 colnames(wvwadata2)[colnames(wvwadata2)=="Pressure.psi."] <- "wvwa_psi_uncorr"
 wvwadata2 <- wvwadata2 %>% select("TIMESTAMP", "wvwa_psi_uncorr")
 # and other wvwa weir data
-wvwadata3 <- read.csv("./DataAnalysis/Data/Inflow/FCR_15min_Inf_20190617.csv", skip = 28, header = T)
+wvwadata3 <- read.csv("./Data/Inflow/FCR_15min_Inf_20190617.csv", skip = 28, header = T)
 colnames(wvwadata3)[colnames(wvwadata3)=="Date.Time"] <- "TIMESTAMP"
 wvwadata3 <- wvwadata3 %>% mutate(TIMESTAMP = parse_date_time(TIMESTAMP, 'dmy HMS',tz = "EST"))
 wvwadata3$TIMESTAMP <- floor_date(wvwadata3$TIMESTAMP, "15 minutes")
 colnames(wvwadata3)[colnames(wvwadata3)=="Pressure.psi."] <- "wvwa_psi_uncorr"
 wvwadata3 <- wvwadata3 %>% select("TIMESTAMP", "wvwa_psi_uncorr")
 # and more data
-wvwadata4 <- read.csv("./DataAnalysis/Data/Inflow/FCR_15min_Inf_20190415.csv", skip = 28, header = T)
+wvwadata4 <- read.csv("./Data/Inflow/FCR_15min_Inf_20190415.csv", skip = 28, header = T)
 colnames(wvwadata4)[colnames(wvwadata4)=="Date.Time"] <- "TIMESTAMP"
 wvwadata4 <- wvwadata4 %>% mutate(TIMESTAMP = parse_date_time(TIMESTAMP, 'dmy HMS',tz = "EST"))
 wvwadata4$TIMESTAMP <- floor_date(wvwadata4$TIMESTAMP, "15 minutes")
@@ -47,13 +47,13 @@ wvwadata <- rbind(wvwadata2, wvwadata1, wvwadata3, wvwadata4)
 
 # wvwa psi needs to be corrected for barometric pressure, so pull in WVWA DO sonde barometric pressure data
 # check on Reservoirs for latest WVWA BP file
-wvwa_bp <- read.csv("./DataAnalysis/Data/Inflow/FCR_WVWA_BarometricPressure_20190603.csv", skip = 28, header =T)
+wvwa_bp <- read.csv("./Data/Inflow/FCR_WVWA_BarometricPressure_20190603.csv", skip = 28, header =T)
 colnames(wvwa_bp)[colnames(wvwa_bp)=="Date.Time"] <- "TIMESTAMP"
 wvwa_bp <- wvwa_bp %>% mutate(TIMESTAMP = parse_date_time(TIMESTAMP, 'dmy HMS',tz = "EST"))
 wvwa_bp$TIMESTAMP <- floor_date(wvwa_bp$TIMESTAMP, "15 minutes")
 colnames(wvwa_bp)[colnames(wvwa_bp)=="Pressure.psi."] <- "wvwa_bp_psi"
 wvwa_bp <- wvwa_bp %>% select("TIMESTAMP", "wvwa_bp_psi")
-wvwa_bp_2 <- read.csv("./DataAnalysis/Data/Inflow/FCR_BV_20190415.csv", skip = 28, header =T)
+wvwa_bp_2 <- read.csv("./Data/Inflow/FCR_BV_20190415.csv", skip = 28, header =T)
 colnames(wvwa_bp_2)[colnames(wvwa_bp_2)=="Date.Time"] <- "TIMESTAMP"
 wvwa_bp_2 <- wvwa_bp_2 %>% mutate(TIMESTAMP = parse_date_time(TIMESTAMP, 'dmy HMS',tz = "EST"))
 wvwa_bp_2$TIMESTAMP <- floor_date(wvwa_bp_2$TIMESTAMP, "15 minutes")
@@ -63,9 +63,9 @@ wvwa_bp_2 <- wvwa_bp_2 %>% select("TIMESTAMP", "wvwa_bp_psi")
 wvwa_bp <- rbind(wvwa_bp_2, wvwa_bp)
 
 # a check to see if the met station barometric pressure is comparable to the wvwa sonde barometric pressure
-#download.file('https://github.com/CareyLabVT/SCCData/raw/carina-data/FCRmet.csv','./DataAnalysis/Data/MET/FCRmet.csv')
-metheader<-read.csv("./DataAnalysis/Data/MET/FCRmet.csv", skip=1, as.is=T) #get header minus wonky Campbell rows
-metdata<-read.csv("./DataAnalysis/Data/MET/FCRmet.csv", skip=4, header=F) #get data minus wonky Campbell rows
+download.file('https://github.com/CareyLabVT/SCCData/raw/carina-data/FCRmet.csv','./Data/MET/FCRmet.csv')
+metheader<-read.csv("./Data/MET/FCRmet.csv", skip=1, as.is=T) #get header minus wonky Campbell rows
+metdata<-read.csv("./Data/MET/FCRmet.csv", skip=4, header=F) #get data minus wonky Campbell rows
 names(metdata)<-names(metheader) #combine the names to deal with Campbell logger formatting
 metdata <- metdata %>% mutate(met_bp_psi = BP_kPa_Avg*0.145038)
 metdata <- metdata %>% select("TIMESTAMP", "met_bp_psi")
@@ -125,8 +125,8 @@ abline(lm(daily$mean_cms_wvwa~daily$mean_cms_diana))
 summary(lm(daily$mean_cms_wvwa~daily$mean_cms_diana))
 plot(daily$date, daily$mean_cms_diana, col = 'red', ylim = c(0.06, 0.217))
 points(daily$date, daily$mean_cms_wvwa)
-legend('center', bty = 'n', lty = c(1,1), c('diana', 'wvwa'), col = c('red', 'black'))
-par(mfrow = c(2,1))
+legend('topright', bty = 'n', lty = c(1,1), c('diana', 'wvwa'), col = c('red', 'black'))
+par(mfrow = c(1,1))
 plot(daily$date, daily$mean_cms_diana, col = 'red')
 plot(daily$date, daily$mean_cms_wvwa)
 
