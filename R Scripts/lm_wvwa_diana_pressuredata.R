@@ -1,6 +1,7 @@
 # building a linear model between the wvwa pressure transducer and diana pressure transducer
 
 library(tidyverse)
+library(lubridate)
 
 
 # download the latest diana weir file
@@ -57,3 +58,5 @@ plot(discharge_daily$Date, discharge_daily$flow_cms)
 points(discharge_daily$Date, discharge_daily$flow_cms_wvwa, col = 'red')
 plot(discharge_daily$flow_cms_wvwa, discharge_daily$flow_cms)
 summary(lm(discharge_daily$flow_cms_wvwa~discharge_daily$flow_cms))
+
+
