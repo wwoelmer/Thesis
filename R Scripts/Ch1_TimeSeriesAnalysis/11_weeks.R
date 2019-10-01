@@ -4,7 +4,7 @@ library(tidyverse)
 
 # read in the dataset that includes only the timeframe of the model (May-Oct 2013-2016) and includes the weeks that have been
 # interpolated
-data <- read.csv("data_interpolated_plusinflowcalcs_MayOct13_16.csv")
+data <- read.csv("./Data/ARIMA_data/data_interpolated_plusinflowcalcs_MayOct13_16.csv")
 data$Date <- as.Date(data$Date)
 
 # create a week number

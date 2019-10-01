@@ -5,7 +5,7 @@
 library(astsa) # See note 1 below
 
 
-data <- read.csv("variables_all_2013_2016.csv")
+data <- read.csv("./Data/ARIMA_data/variables_all_2013_2016.csv")
 
 plot(data$Chla_ugL, type="b") #time series plot of x with points marked as “o”
 lag1.plot(data$Chla_ugL,30) # Plots x versus lag 1 of x.
