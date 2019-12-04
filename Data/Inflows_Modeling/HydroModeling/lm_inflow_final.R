@@ -6,7 +6,7 @@ library(MuMIn)
 library(rsq)
 
 # read in inflow data which has been aggregated to daily statistics
-inf <-  read.csv("./Inflow/inflowcalcs_FCR.csv")
+inf <-  read.csv("./Data/Inflow/inflowcalcs_FCR.csv")
 inf$Date <- as.Date(inf$Date)
 plot(inf$Date, inf$mean_wrt)
 plot(inf$Temp_inf_mean, inf$mean_flow)
@@ -36,7 +36,7 @@ abline(lm(inf_clean$mean_flow~inf_clean$meanflow_lag7))
 
 # bring in other possible explanatory met variables for a global model
 # met data already aggregated to a daily scale
-met <- read.csv('./MET/Met_FCR_daily.csv')
+met <- read.csv('./Data/MET/Met_FCR_daily.csv')
 met <- met %>% select(-X)
 met$Date <- as.Date(met$Date)
 
@@ -61,7 +61,7 @@ metflow1 <- metflow1[metflow1$Date>"2013-05-15" & metflow1$Date<"2015-12-31",]
 metflow7 <- metflow7[metflow7$Date>"2013-05-21"& metflow7$Date<"2015-12-31",]
 
 
-# create global model with all possible variables, first with just the 1 day lag
+# create global model with all possible variables, including the 1 day lag
 metflow1_mod <- glm(mean_flow~  meanflow_lag1 + AirTemp_mean + Rain_sum + RelHum_max + ShortWave_mean + WindSpeed_max,
                     data = metflow1, family = gaussian, na.action = "na.fail")
 
