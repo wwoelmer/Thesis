@@ -537,23 +537,27 @@ a = ggplot(fcr_map, aes(long, lat, fill=Depths)) +
   theme(axis.text = element_text(size = 25, color = "black"))+
   theme_bw()
 
-b = a + 
+b = a +
   geom_line(data = inf, aes(x = long, y = lat), lwd = 1, color = "dodgerblue1")+
   geom_line(data = pipe, aes(x = long, y = lat), lwd = 1, color = "dodgerblue4", lty = "dashed")+
-  geom_point(data = sites, aes(x = lon, y = lat, cex = chla_ugL), pch = 21, bg = "green", col = "black")
+  geom_point(data = sites, aes(x = lon, y = lat, size = chla_ugL ), pch = 21, bg = "green", col = "black")+
+  scale_size_continuous(limits=c(0,40),breaks=c(0,10,20,30,40))
 
 c = b +
  # north(fcr_map, symbol = 3, scale = 0.15, location = "topleft") +
   scalebar(fcr_map, dist = 0.25, dist_unit = "km",
            transform = TRUE, model = "WGS84")
 
-c
+c = c + ggtitle('May') + theme(plot.title = element_text(size = 40))
 
 
 pdf("./Materials for R mapping/30May19_RCC_chla.pdf", width = 8, height = 6)
 c
 dev.off()
 
+png("./Materials for R mapping/30May19_RCC_chla.png", width = 1100, height = 800)
+c
+dev.off()
 
 
 

@@ -2,7 +2,7 @@
 pacman::p_load(scatterplot3d, rgdal, maptools, tidyverse, zoo, sf, GISTools, ggsn)
 
 
-sites <- read_csv("./Materials for R mapping/Jul_RCC_chla_mapping.csv")
+sites <- read_csv("./Materials for R mapping/Oct_RCC_chla_mapping.csv")
 
 
 scatter.grid <- function (x, y = NULL, z = NULL, color = par("col"), pch = NULL, 
@@ -537,11 +537,10 @@ a = ggplot(fcr_map, aes(long, lat, fill=Depths)) +
   theme(axis.text = element_text(size = 25, color = "black"))+
   theme_bw()
 
-
 b = a +
   geom_line(data = inf, aes(x = long, y = lat), lwd = 1, color = "dodgerblue1")+
   geom_line(data = pipe, aes(x = long, y = lat), lwd = 1, color = "dodgerblue4", lty = "dashed")+
-  geom_point(data = sites, aes(x = lon, y = lat, size = chla_ugL ), pch = 21, bg = "green", col = "black")+
+  geom_point(data = sites, aes(x = long, y = lat, size = chla_ugL ), pch = 21, bg = "green", col = "black")+
   scale_size_continuous(limits=c(0,40),breaks=c(0,10,20,30,40))
 
 c = b +
@@ -549,14 +548,14 @@ c = b +
   scalebar(fcr_map, dist = 0.25, dist_unit = "km",
            transform = TRUE, model = "WGS84")
 
-c = c + ggtitle('July')+ theme(plot.title = element_text(size = 40))
+c = c + ggtitle('October') + theme(plot.title = element_text(size = 40))
 
 
-pdf("./Materials for R mapping/18Jul19_RCC_chla.pdf", width = 8, height = 6)
+pdf("./Materials for R mapping/04Oct19_RCC_chla.pdf", width = 8, height = 6)
 c
 dev.off()
 
-png("./Materials for R mapping/18Jul19_RCC_chla.png", width = 1100, height = 800)
+png("./Materials for R mapping/04Oct19_RCC_chla.png", width = 1100, height = 800)
 c
 dev.off()
 

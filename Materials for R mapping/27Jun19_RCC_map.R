@@ -565,12 +565,27 @@ f = e +
   geom_line(data = pipe, aes(x = long, y = lat), lwd = 1, color = "dodgerblue4", lty = "dashed")+
   geom_point(data = sites, aes(x = lon, y = lat, cex = co2_uM), pch = 21, bg = "red", col = "black")
 
+f = e +
+  geom_line(data = inf, aes(x = long, y = lat), lwd = 1, color = "dodgerblue1")+
+  geom_line(data = pipe, aes(x = long, y = lat), lwd = 1, color = "dodgerblue4", lty = "dashed")+
+  geom_point(data = sites, aes(x = lon, y = lat, size = chla_ugL ), pch = 21, bg = "green", col = "black")+
+  scale_size_continuous(limits=c(0,40),breaks=c(0,10,20,30,40))
+
+
 g = f +
-  north(fcr_map, symbol = 3, scale = 0.15, location = "topleft") +
+  #north(fcr_map, symbol = 3, scale = 0.15, location = "topleft") +
   scalebar(fcr_map, dist = 0.25, dist_unit = "km",
            transform = TRUE, model = "WGS84")
 
+g = g + ggtitle('June') +  theme(plot.title = element_text(size = 40))
+
+pdf("./Materials for R mapping/27Jun19_RCC_chla.pdf", width = 8, height = 6)
 g
+dev.off()
+
+png("./Materials for R mapping/27Jun19_RCC_chla.png", width = 1100, height = 800)
+g
+dev.off()
 
 h = ggplot(fcr_map, aes(long, lat, fill=Depths)) +
   geom_polygon()+
@@ -592,10 +607,6 @@ j = i +
   north(fcr_map, symbol = 3, scale = 0.15, location = "topleft") +
   scalebar(fcr_map, dist = 0.25, dist_unit = "km",
            transform = TRUE, model = "WGS84")
-
-pdf("./Materials for R mapping/27Jun19_RCC_chla.pdf", width = 8, height = 6)
-j
-dev.off()
 
 
 
