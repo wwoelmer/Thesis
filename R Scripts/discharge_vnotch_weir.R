@@ -14,7 +14,7 @@ dianadata$TIMESTAMP <- as.POSIXct(dianadata$TIMESTAMP, format = "%Y-%m-%d %H:%M:
 colnames(dianadata)[colnames(dianadata)=="Lvl_psi"] <- "diana_psi_corr"
 dianadata <- dianadata %>% select("TIMESTAMP", "diana_psi_corr")
 
-# separate into pre and post vnotch weir to apply different equations and get rid of same data surrounding the time when the weir was being replaced
+# separate into pre and post vnotch weir to apply different equations and get rid of some data surrounding the time when the weir was being replaced
 
 # the old weir equations are taken directly from MEL's Inlow Aggregation script
 dianadata_pre <- dianadata[dianadata$TIMESTAMP< as.POSIXct('2019-06-06 09:30:00'),]
