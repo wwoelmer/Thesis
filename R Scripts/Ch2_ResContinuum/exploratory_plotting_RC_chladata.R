@@ -3,7 +3,7 @@
 library(lubridate)
 library(tidyverse)
 
-chl <- read.csv("./Data/chla_extraction/chla_RCD_data.csv")
+chl <- read.csv("./Data/analytical chemistry/chla_extraction/chla_RCD_data.csv")
 chl$Date <- as.Date(chl$Date)
 
 ggplot(data = chl, aes(x = Date, y = Chla_ugL )) +facet_wrap(~Site) +geom_line()
@@ -52,4 +52,23 @@ ggplot(data = chl[chl$Month=='8' & chl$Distance_from_stream>0,], aes(x = Distanc
   geom_smooth(method = 'lm') +
   ggtitle('August')
 
+ggplot(data = chl[chl$Month=='9' & chl$Distance_from_stream>0,], aes(x = Distance_from_stream, y = Chla_ugL, col = Reservoir ))  + 
+  geom_point() +
+  geom_smooth(method = 'lm') +
+  ggtitle('September')
+ggplot(data = chl[chl$Month=='10' & chl$Distance_from_stream>0,], aes(x = Distance_from_stream, y = Chla_ugL, col = Reservoir ))  + 
+  geom_point() +
+  geom_smooth(method = 'lm') +
+  ggtitle('October')
+
+
+ggplot(data = chl[chl$Site=='F50' & chl$Reservoir=='F',], aes(x = Date, y = Chla_ugL)) + geom_point() + geom_line() +
+  ggtitle('Chla at F50 01.m')
+
+ggplot(data = chl[chl$Site=='B50' & chl$Reservoir=='B',], aes(x = Date, y = Chla_ugL)) + geom_point() + geom_line() +
+  ggtitle('Chla at F50 01.m')
 # do some statistical test to see if the different zones are actually different from each other? ...ANOVA??
+
+plot(chl$Flow_cms, log(chl$Chla_ugL))
+
+plot()
