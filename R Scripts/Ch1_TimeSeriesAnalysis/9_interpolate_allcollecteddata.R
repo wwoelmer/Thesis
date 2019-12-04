@@ -5,7 +5,7 @@ library(zoo)
 library(tidyverse)
 
 #master dataset of data collected by carey lab (i.e., no met data)
-data <- read.csv("FCR_VT_data_2013_2017.csv")
+data <- read.csv("./Data/ARIMA_data/FCR_VT_data_2013_2017.csv")
 data$Date <- as.Date(data$Date)
 data <- data %>% select(Date, everything())
 #truncate the dataset to the end of the 2016 stratified period
