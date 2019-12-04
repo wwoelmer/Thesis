@@ -20,7 +20,7 @@ varall <- varall %>% select(-X)
 varall$Date <- NA
 varall <- varall%>%select(Date, everything())
 # subset dataset by the column names in the correlation matrix
-dataall <- data %>% select(colnames(varall))
+dataall <- data# %>% select(colnames(varall))
 # subset to get rid of NA's at beginning so that the model will run. this truncates dataset to May 15 2013
 dataall$Date <- as.Date(dataall$Date)
 dataall <- dataall[dataall$Date>"2013-05-09" & dataall$Date<"2014-01-01",]
