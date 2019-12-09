@@ -57,7 +57,7 @@ full_time_hour_obs <- seq(  as.POSIXct('2018-08-15 00:00:00'),
                             as.POSIXct(Sys.time()),
                             by = "1 hour")
 
-source(paste0('C:/Users/wwoel/Desktop/FLARE/FLARE_3/FLARE_3',"/","Rscripts/create_obs_met_input_DA.R"))
+source(paste0('C:/Users/wwoel/Desktop/FLARE_AR_CHLA',"/","Rscripts/create_obs_met_input_DA.R"))
 
 create_obs_met_input_DA(fname = met_obs_fname_wdir,
                         outfile= met_update_outfile,
@@ -221,3 +221,7 @@ max_metrics <- model_metrics(pred_max, update$Chla_sqrt)
 mean_metrics <- model_metrics(pred_mean, update$Chla_sqrt)
 median_metrics <- model_metrics(pred_median, update$Chla_sqrt)
 AR_metrics <- model_metrics(pred_AR, update$Chla_sqrt)
+
+# subset the datasets to just the columns needed for the models above
+data_hf <- update %>% select(Date, Chla_sqrt, Chla_ARlag1_sqrt, ShortWave_max)
+write.csv(data_hf, row.names = FALSE, 'C:/Users/wwoel/Desktop/FLARE_AR_CHLA/data_arima_highfrequency.csv')
