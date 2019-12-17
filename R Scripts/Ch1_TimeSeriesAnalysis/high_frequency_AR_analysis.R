@@ -181,6 +181,7 @@ write.csv(update, './Data/ARIMA_data/EXO_plusdrivers_AR.csv', row.names = FALSE)
 
 
 library(MuMIn)
+update <- read.csv('./Data/ARIMA_data/EXO_plusdrivers_AR.csv')
 all_max <- glm(Chla_sqrt~Chla_ARlag1_sqrt + mean_flow + AirTemp_max + LongWave_max + ShortWave_max + Rain_sum + RelHum_max + WindSpeed_max, 
            data = update, family = gaussian, na.action = 'na.fail')
 glm_max <- dredge(all_max, rank = 'AICc', fixed = 'Chla_ARlag1_sqrt')

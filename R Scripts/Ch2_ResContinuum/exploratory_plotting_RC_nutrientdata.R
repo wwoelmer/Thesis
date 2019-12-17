@@ -5,6 +5,7 @@ nuts <- read.csv('./Data/analytical chemistry/Lachat 2019/chemistry_working_half
 nuts <- nuts[nuts$Depth_m==0.1,]
 nuts$Date <- as.Date(nuts$Date)
 
+plot(nuts$Date, nuts$NH4_ppb)
 ggplot(data = nuts, aes(x = Date, y = NH4_ppb )) +facet_wrap(~Site) +geom_line()
 
 ggplot(data = nuts, aes(x = Date, y = NH4_ppb, col = Site ))  +geom_line() +facet_wrap(~Reservoir)
