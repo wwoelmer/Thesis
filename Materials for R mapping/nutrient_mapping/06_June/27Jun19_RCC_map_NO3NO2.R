@@ -540,8 +540,8 @@ a = ggplot(fcr_map, aes(long, lat, fill=Depths)) +
 b = a +
   geom_line(data = inf, aes(x = long, y = lat), lwd = 1, color = "dodgerblue1")+
   geom_line(data = pipe, aes(x = long, y = lat), lwd = 1, color = "dodgerblue4", lty = "dashed")+
-  geom_point(data = sites, aes(x = lon, y = lat, size = NO3NO2_ppb ), pch = 21, bg = "blue", col = "black")#+
-  #scale_size_continuous(limits=c(0,40),breaks=c(0,10,20,30,40))
+  geom_point(data = sites, aes(x = lon, y = lat, size = NO3NO2_ppb ), pch = 21, bg = "blue", col = "black")+
+  scale_size_continuous(limits=c(0,250))
 
 c = b +
  # north(fcr_map, symbol = 3, scale = 0.15, location = "topleft") +

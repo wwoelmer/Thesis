@@ -2,7 +2,7 @@
 pacman::p_load(scatterplot3d, rgdal, maptools, tidyverse, zoo, sf, GISTools, ggsn)
 
 
-sites <- read_csv("./Materials for R mapping/nutrient_mapping/May_RCC_phosphate_mapping.csv")
+sites <- read_csv("./Materials for R mapping/nutrient_mapping/05_May/May_RCC_phosphate_mapping.csv")
 
 
 scatter.grid <- function (x, y = NULL, z = NULL, color = par("col"), pch = NULL, 
@@ -540,8 +540,8 @@ a = ggplot(fcr_map, aes(long, lat, fill=Depths)) +
 b = a +
   geom_line(data = inf, aes(x = long, y = lat), lwd = 1, color = "dodgerblue1")+
   geom_line(data = pipe, aes(x = long, y = lat), lwd = 1, color = "dodgerblue4", lty = "dashed")+
-  geom_point(data = sites, aes(x = lon, y = lat, size = PO4_ppb ), pch = 21, bg = "purple", col = "black")#+
-  #scale_size_continuous(limits=c(0,40),breaks=c(0,10,20,30,40))
+  geom_point(data = sites, aes(x = lon, y = lat, size = PO4_ppb ), pch = 21, bg = "purple", col = "black")+
+  scale_size_continuous(limits=c(0,25))
 
 c = b +
  # north(fcr_map, symbol = 3, scale = 0.15, location = "topleft") +
