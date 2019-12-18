@@ -1,6 +1,6 @@
 library(tidyverse)
 
-data <- read.csv("variables_all_pluslag_2013_2016.csv")
+data <- read.csv("./Data/ARIMA_data/variables_all_pluslag_2013_2016.csv")
 # get rid of non-driver data, including DOC_mgL because there is no data from this depth
 #data <- data %>% select(-(Date:Depth), -(week_julian:week_cum), -DOC_mgL)
 
