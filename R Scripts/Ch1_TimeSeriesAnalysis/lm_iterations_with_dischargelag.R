@@ -46,3 +46,6 @@ rmse((pred_mod1_1316)^2, (data$Chla_sqrt)^2)
 rmse((pred_1weeklag)^2, (data$Chla_sqrt)^2)
 
 plot(data$mean_flow_lag1week, data$mean_flow)
+
+data <- data %>% select(-mean_flow)
+write.csv(data, './Data/ARIMA_data/data_arima_dischargelag.csv', row.names = FALSE)
