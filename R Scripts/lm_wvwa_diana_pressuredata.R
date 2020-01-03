@@ -46,6 +46,9 @@ plot(discharge$TIMESTAMP, discharge$flow_cms)
 points(discharge$TIMESTAMP, discharge$flow_cms_wvwa, col = 'red')
 plot(discharge$flow_cms_wvwa, discharge$flow_cms)
 summary(lm(discharge$flow_cms_wvwa~discharge$flow_cms))
+mod <- lm(discharge$flow_cms_wvwa~discharge$flow_cms)
+res <- resid(mod)
+sd(res) # use this as the sd for observational uncertainty in dishcarge drive data for forecasts
 # dianaflow = 0.0200487 + wvwaflow*1.2035001
 # wvwaflow = -0.0160121 + 0.8233599*dianaflow
 
