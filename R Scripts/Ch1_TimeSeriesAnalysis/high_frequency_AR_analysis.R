@@ -3,15 +3,15 @@
 library(tidyverse)
 library(lubridate)
 
-download.file('https://github.com/CareyLabVT/SCCData/raw/mia-data/Catwalk.csv','./Data/Catwalk/Catwalk.csv')
-download.file('https://github.com/CareyLabVT/SCCData/raw/carina-data/FCRmet.csv','./Data/MET/FCRmet.csv')
-download.file('https://github.com/CareyLabVT/SCCData/raw/diana-data/FCRweir.csv','./Data/Inflow/FCRweir.csv')
+#download.file('https://github.com/CareyLabVT/SCCData/raw/mia-data/Catwalk.csv','./Data/Catwalk/Catwalk.csv')
+#download.file('https://github.com/CareyLabVT/SCCData/raw/carina-data/FCRmet.csv','./Data/MET/FCRmet.csv')
+#download.file('https://github.com/CareyLabVT/SCCData/raw/diana-data/FCRweir.csv','./Data/Inflow/FCRweir.csv')
 
 folder <- "C:/Users/wwoel/Dropbox/Thesis"
 data_location <-  "C:/Users/wwoel/Dropbox/Thesis/Data"
 
 
-source(paste0('C:/Users/wwoel/Desktop/FLARE/FLARE_3/FLARE_3',"/","Rscripts/extract_EXOchl_chain_dailyavg.R")) #this is the original file modified to take a daily avg rather than the midnight reading
+source(paste0('C:/Users/wwoel/Desktop/FLARE_AR_CHLA',"/","Rscripts/extract_EXOchl_chain_dailyavg.R")) #this is the original file modified to take a daily avg rather than the midnight reading
 
 temperature_location <- paste0(data_location, "/", "Catwalk")
 
@@ -124,27 +124,33 @@ dianadata_post <- dianadata_post %>%  mutate(head = (0.149*diana_psi_corr)/0.293
   mutate(flow_cms = 2.391* (head^2.5)) %>% 
   select(TIMESTAMP, diana_psi_corr, flow_cms)
 
-dianadata <- rbind(dianadata_pre, dianadata_post)                                                   
+dianadata <- rbind(dianadata_pre, dianadata_post)    
+
+# convert diana into wvwa units (equation taken from 'thesis/r scripts/lm_wvwa_diana_pressuredata.R' on 10-08-2019)
+dianadata <- dianadata %>%  mutate(flow_cms_diana_wvwaunits = (flow_cms*0.713454 + (-0.004732)))
 
 # calculate daily values
 discharge_diana_daily <- dianadata %>% 
-  select(TIMESTAMP, flow_cms) %>% 
+  select(TIMESTAMP, flow_cms_diana_wvwaunits) %>% 
   mutate(Date = date(TIMESTAMP))%>% 
   group_by(Date) %>% 
-  summarise_all('mean') %>% 
-  select(-TIMESTAMP)
+ mutate(mean_flow = mean(flow_cms_diana_wvwaunits)) %>% 
+  mutate(flow_max = max(flow_cms_diana_wvwaunits)) %>% 
+  mutate(flow_min = min(flow_cms_diana_wvwaunits)) %>% 
+  mutate(flow_median = median(flow_cms_diana_wvwaunits)) %>% 
+  select(-TIMESTAMP, - flow_cms_diana_wvwaunits)
 
-# convert diana into wvwa units (equation taken from 'thesis/r scripts/lm_wvwa_diana_pressuredata.R' on 10-08-2019)
-discharge_diana_daily_wvwaunits <- discharge_diana_daily %>% 
-  mutate(flow_cms_diana_wvwaunits = (flow_cms*0.713454 + (-0.004732)))
+discharge_diana_daily <- discharge_diana_daily[!duplicated(discharge_diana_daily$Date),]
+discharge_diana_daily <- discharge_diana_daily %>% select(Date, everything())
+
 
 # throw out data 2019-06-04 through 2019-06-06 because the plug was removed from the weir in prep for replacing weir face so numbers are artificially low
-discharge_diana_daily_wvwaunits <- discharge_diana_daily_wvwaunits[discharge_diana_daily_wvwaunits$Date!=as.Date('2019-06-04'),]
-discharge_diana_daily_wvwaunits <- discharge_diana_daily_wvwaunits[discharge_diana_daily_wvwaunits$Date!='2019-06-05',]
-discharge_diana_daily_wvwaunits <- discharge_diana_daily_wvwaunits[discharge_diana_daily_wvwaunits$Date!='2019-06-06',]
+discharge_diana_daily <- discharge_diana_daily[discharge_diana_daily$Date!=as.Date('2019-06-04'),]
+discharge_diana_daily <- discharge_diana_daily[discharge_diana_daily$Date!='2019-06-05',]
+discharge_diana_daily <- discharge_diana_daily[discharge_diana_daily$Date!='2019-06-06',]
 
-discharge_diana_daily_wvwaunits <- discharge_diana_daily_wvwaunits %>% select(-flow_cms)
-colnames(discharge_diana_daily_wvwaunits) <- c('Date', 'mean_flow')
+
+
 
 
 # gather wvwa inflow data before april 22 2019
@@ -154,12 +160,15 @@ inf_old <- inf_old[inf_old$Date>as.Date('2018-08-14'),]
 
 inf_old <- inf_old %>% group_by(Date) %>%
   mutate(mean_flow = mean(Flow_cms, na.rm = TRUE)) %>% 
-  select(Date, mean_flow)
+  mutate(flow_max = max(Flow_cms, na.rm = TRUE)) %>% 
+  mutate(flow_min = min(Flow_cms, na.rm = TRUE)) %>% 
+  mutate(flow_median = median(Flow_cms, na.rm = TRUE)) %>% 
+  select(Date, mean_flow:flow_median)
 inf_old <- inf_old[!duplicated(inf_old$Date),]
 inf_old <- as.data.frame(inf_old)
 
 # subset diana data to time period where wvwa is unavailable
-inf_diana <- discharge_diana_daily_wvwaunits[discharge_diana_daily_wvwaunits$Date>as.Date('2019-09-20'),]
+inf_diana <- discharge_diana_daily[discharge_diana_daily$Date>as.Date('2019-09-20'),]
 
 inf_all <- rbind(inf_old, inf_diana)
 
@@ -178,6 +187,17 @@ update <- update %>%
 
 # save the dataset as a data file
 write.csv(update, './Data/ARIMA_data/EXO_plusdrivers_AR.csv', row.names = FALSE)
+
+# make some transformations of data to fit lm assumptions
+update <- update %>% mutate(WindSpeed_max_log = log(WindSpeed_max)) %>% 
+  mutate(WindSpeed_mean_log = log(WindSpeed_mean)) %>% 
+  mutate(WindSpeed_median_log = log(WindSpeed_median)) %>% 
+  mutate(Rain_sum_log = log(Rain_sum)) %>% 
+  mutate(AirTemp_max_log = log(AirTemp_max)) %>% 
+  mutate(AirTemp_mean_log = log(AirTemp_mean)) %>% 
+  mutate(AirTemp_median_log = log(AirTemp_median)) %>% 
+  mutate(RelHum_max_log = log(RelHum_max)) %>% 
+  
 
 
 library(MuMIn)
