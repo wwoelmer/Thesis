@@ -29,6 +29,8 @@ model_1316 <- glm(Chla_sqrt~Chla_ARlag1_sqrt  +  mean_flow + AirTemp_mean_log + 
 glm_1316 <- dredge(model_1316, rank = "AICc", fixed = "Chla_ARlag1_sqrt")
 select_1316 <- subset(glm_1316, delta<2 )
 
+write.csv(glm_1316, './Writing/Ch 1 AR Forecasts/weekly_all_models.csv', row.names = FALSE)
+
 # now build selected models
 mod1_1316 <- glm(Chla_sqrt~Chla_ARlag1_sqrt + mean_flow +ShortWave_mean, 
                  data = dataall, family = gaussian, na.action = 'na.fail')
