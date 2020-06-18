@@ -5,7 +5,7 @@ library(lubridate)
 
 
 # download the latest diana weir file
-download.file('https://github.com/CareyLabVT/SCCData/raw/diana-data/FCRweir.csv','./Data/Inflow/FCRweir.csv')
+#download.file('https://github.com/CareyLabVT/SCCData/raw/diana-data/FCRweir.csv','./Data/Inflow/FCRweir.csv')
 
 dianaheader<-read.csv("./Data/Inflow/FCRweir.csv", skip=1, as.is=T) #get header minus wonky Campbell rows
 dianadata<-read.csv("./Data/Inflow/FCRweir.csv", skip=4, header=F) #get data minus wonky Campbell rows
@@ -48,7 +48,7 @@ plot(discharge$flow_cms_wvwa, discharge$flow_cms)
 summary(lm(discharge$flow_cms_wvwa~discharge$flow_cms))
 mod <- lm(discharge$flow_cms_wvwa~discharge$flow_cms)
 res <- resid(mod)
-sd(res) # use this as the sd for observational uncertainty in dishcarge drive data for forecasts
+sd(res) # use this as the sd for observational uncertainty in dishcarge drive data for forecasts?
 # dianaflow = 0.0200487 + wvwaflow*1.2035001
 # wvwaflow = -0.0160121 + 0.8233599*dianaflow
 
