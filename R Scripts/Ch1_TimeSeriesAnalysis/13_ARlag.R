@@ -22,7 +22,11 @@ acf(ar1fit$residuals, xlim=c(1,18)) # ACF of the residuals for lags 1 to 18
 data2 <- data[data$Depth==1.0,]
 plot(data2$Chla_ugL, type="l") #time series plot of x with points marked as “o”
 lag1.plot(data2$Chla_ugL,30) # Plots x versus lag 1 of x.
-acf(data2$Chla_ugL, xlim=c(1,25)) # Plots the ACF of x for lags 1 to 19
+
+png("./Figures/arima/ACF_SI_fig.png")
+acf(data2$Chla_ugL, xlim=c(1,25), main = 'ACF of 2013-2016 Weekly Surface Chl-a') # Plots the ACF of x for lags 1 to 19
+dev.off()
+
 xlag1=lag(data2$Chla_ugL,1) # Creates a lag 1 of x variable. See note 2
 y=as.data.frame(cbind(data2$Chla_ugL,xlag1)) # See note 3 below
 ar1fit=lm(y[,1]~y[,2])#Does regression of t ~ t-1, stores results object named ar1fit
